@@ -58,4 +58,11 @@ async googleRedirect(@Req() req: Request & { user: any }, @Res() res: Response) 
   res.redirect(`http://localhost:4200/auth/callback?token=${token}`);
 }
 
+@UseGuards(AuthGuard('jwt'))
+@Get('me')
+getMe(@Req() req: any) {
+  return req.user;
+}
+
+
 }
