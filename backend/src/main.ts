@@ -12,6 +12,7 @@ async function bootstrap() {
     origin: [
       'http://localhost:4200',
       'https://family-tree-app-ezit.vercel.app',
+      'https://family-tree-app-delta.vercel.app'
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
