@@ -17,7 +17,7 @@ export class ContactService {
   ) {
     this.recipient =
       this.config.get<string>('CONTACT_FORM_RECIPIENT')?.trim() ||
-      'support@familytree.com';
+      'support@rodostoria.com';
   }
 
   async submit(dto: ContactMessageDto): Promise<void> {
