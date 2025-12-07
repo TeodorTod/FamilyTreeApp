@@ -2,18 +2,69 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Frontend</title>
     <base href="/" />
+    <title>Rodostoria • Digital Family Tree</title>
+    <meta
+      name="description"
+      content="Родостория е приложение за дигитално пазене на родовата памет. Помни рода си, съхрани паметта им."
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light" />
     <meta name="supported-color-schemes" content="light" />
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <meta name="theme-color" content="#0F3A2F" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/; connect-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ http://localhost:3000 https://api.rodostoria.com https://family-tree-app-delta.vercel.app; frame-src https://www.google.com/recaptcha/;"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Rodostoria • Digital Family Tree" />
+    <meta
+      property="og:description"
+      content="Родостория е приложение за дигитално пазене на родовата памет. Помни рода си, съхрани паметта им."
+    />
+    <meta property="og:url" content="https://rodostoria.com" />
+    <meta property="og:image" content="/assets/social/share.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Rodostoria • Digital Family Tree" />
+    <meta
+      name="twitter:description"
+      content="Родостория е приложение за дигитално пазене на родовата памет. Помни рода си, съхрани паметта им."
+    />
+    <meta name="twitter:image" content="/assets/social/share.png" />
+
+    <link rel="canonical" href="https://rodostoria.com" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Rodostoria",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Web",
+        "url": "https://rodostoria.com",
+        "description": "Родостория е приложение за дигитално пазене на родовата памет. Помни рода си, съхрани паметта им."
+      }
+    </script>
   </head>
   <body>
     <app-root></app-root>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('/service-worker.js')
+            .catch((err) => console.error('SW registration failed', err));
+        });
+      }
+    </script>
   </body>
 </html>
