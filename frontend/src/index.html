@@ -15,7 +15,7 @@
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/; connect-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ http://localhost:3000 https://api.rodostoria.com https://family-tree-app-delta.vercel.app https://familytreeapp-fnlp.onrender.com; frame-src https://www.google.com/recaptcha/;"
+      content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://js.stripe.com; connect-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ http://localhost:3000 https://api.rodostoria.com https://family-tree-app-delta.vercel.app https://familytreeapp-fnlp.onrender.com https://js.stripe.com https://checkout.stripe.com; frame-src https://www.google.com/recaptcha/ https://js.stripe.com https://checkout.stripe.com;"
     />
 
     <meta property="og:type" content="website" />
@@ -58,7 +58,10 @@
   <body>
     <app-root></app-root>
     <script>
-      if ('serviceWorker' in navigator) {
+      if (
+        'serviceWorker' in navigator &&
+        window.location.hostname !== 'localhost'
+      ) {
         window.addEventListener('load', () => {
           navigator.serviceWorker
             .register('/service-worker.js')
