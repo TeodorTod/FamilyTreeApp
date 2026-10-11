@@ -3,15 +3,30 @@ import { PrismaService } from '../src/prisma/prisma.service';
 
 describe('SharingService clone', () => {
   let service: SharingService;
-  let prisma: any;
+  let prisma: {
+    familyMember: {
+      findUnique: jest.Mock;
+      findFirst: jest.Mock;
+      create: jest.Mock;
+    };
+    memberProfile: { create: jest.Mock };
+    $transaction: jest.Mock;
+  };
 
   beforeEach(() => {
     prisma = {
-      familyMember: { findUnique: jest.fn() },
+      familyMember: {
+        findUnique: jest.fn(),
+        findFirst: jest.fn(),
+        create: jest.fn(),
+      },
       memberProfile: { create: jest.fn() },
-      $transaction: (fn: any) => fn(prisma),
-    } as Partial<PrismaService> as any;
-    service = new SharingService(prisma);
+      $transaction: jest.fn(),
+    };
+    prisma.$transaction.mockImplementation((callback: (tx: typeof prisma) => unknown) =>
+      callback(prisma),
+    );
+    service = new SharingService(prisma as unknown as PrismaService);
   });
 
   it('clones member without relationships and sets metadata', async () => {
@@ -38,9 +53,8 @@ describe('SharingService clone', () => {
       profile: null,
     });
 
-    prisma.familyMember.create = jest.fn().mockResolvedValue({ id: 'new1' });
-    prisma.memberProfile.create = jest.fn();
-    prisma.familyMember.findFirst = jest.fn().mockResolvedValue(null);
+    prisma.familyMember.create.mockResolvedValue({ id: 'new1' });
+    prisma.familyMember.findFirst.mockResolvedValue(null);
 
     const id = await service.cloneMemberToUser('src1', 'req');
     expect(id).toBe('new1');
@@ -51,4 +65,3 @@ describe('SharingService clone', () => {
     expect(arg.copiedFromMemberId).toBe('src1');
   });
 });
-

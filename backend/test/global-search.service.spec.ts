@@ -3,15 +3,21 @@ import { PrismaService } from '../src/prisma/prisma.service';
 
 describe('GlobalSearchService', () => {
   let service: GlobalSearchService;
-  let prisma: jest.Mocked<PrismaService>;
+  let prisma: {
+    familyMember: { findMany: jest.Mock };
+    userSettings: { findMany: jest.Mock };
+    memberShareConsent: { findMany: jest.Mock };
+    shareRequest: { findMany: jest.Mock };
+  };
 
   beforeEach(() => {
     prisma = {
       familyMember: { findMany: jest.fn() },
       userSettings: { findMany: jest.fn() },
       memberShareConsent: { findMany: jest.fn() },
-    } as any;
-    service = new GlobalSearchService(prisma as any);
+      shareRequest: { findMany: jest.fn().mockResolvedValue([]) },
+    };
+    service = new GlobalSearchService(prisma as unknown as PrismaService);
   });
 
   it('filters non-discoverable and respects allowDetails', async () => {
@@ -33,4 +39,3 @@ describe('GlobalSearchService', () => {
     expect(data[0].requiresShareApproval).toBe(false);
   });
 });
-
