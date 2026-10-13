@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PrivacySettingsComponent } from './privacy-settings.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateTesting } from '../../../shared/testing/translate-testing.providers';
 import { SharingApiService } from '../../../core/services/sharing-api.service';
 import {
   CookieConsentPreferences,
@@ -56,10 +56,11 @@ describe('PrivacySettingsComponent', () => {
     cookieService = new CookieConsentServiceStub();
 
     await TestBed.configureTestingModule({
-      imports: [PrivacySettingsComponent, TranslateModule.forRoot()],
+      imports: [PrivacySettingsComponent],
       providers: [
         { provide: SharingApiService, useValue: sharingApi },
         { provide: CookieConsentService, useValue: cookieService },
+        provideTranslateTesting(),
       ],
     }).compileComponents();
 

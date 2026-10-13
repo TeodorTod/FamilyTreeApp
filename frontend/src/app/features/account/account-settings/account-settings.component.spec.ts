@@ -3,7 +3,10 @@ import { of } from 'rxjs';
 import { AccountSettingsComponent } from './account-settings.component';
 import { AccountService } from '../services/account.service';
 import { LanguageService } from '../../../../assets/i18n/language.service';
-import { TranslateService } from '@ngx-translate/core';
+import { provideTranslateTesting } from '../../../shared/testing/translate-testing.providers';
+import { AuthService } from '../../auth/services/auth.service';
+import { FamilyService } from '../../../core/services/family.service';
+import { Router } from '@angular/router';
 
 describe('AccountSettingsComponent', () => {
   let component: AccountSettingsComponent;
@@ -13,7 +16,7 @@ describe('AccountSettingsComponent', () => {
     id: 'user-1',
     email: 'test@example.com',
     createdAt: new Date().toISOString(),
-    language: 'en',
+    language: 'en' as const,
   };
 
   beforeEach(async () => {
@@ -36,13 +39,10 @@ describe('AccountSettingsComponent', () => {
           provide: LanguageService,
           useValue: { current: () => 'en', use: () => void 0 },
         },
-        {
-          provide: TranslateService,
-          useValue: {
-            instant: (key: string) => key,
-            onLangChange: of({}),
-          },
-        },
+        { provide: AuthService, useValue: { refreshProfile: () => void 0 } },
+        { provide: FamilyService, useValue: { getFamilyMemberByRole: () => of(null) } },
+        { provide: Router, useValue: { navigate: () => Promise.resolve(true) } },
+        provideTranslateTesting(),
       ],
     }).compileComponents();
 
