@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MemberMediaGalleryComponent } from './member-media-gallery.component';
+import { provideMessageTesting } from '../../../../shared/testing/message-testing.providers';
 
 describe('MemberMediaGalleryComponent', () => {
   let component: MemberMediaGalleryComponent;
@@ -8,7 +9,8 @@ describe('MemberMediaGalleryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MemberMediaGalleryComponent]
+      imports: [MemberMediaGalleryComponent],
+      providers: [provideMessageTesting()],
     })
     .compileComponents();
 

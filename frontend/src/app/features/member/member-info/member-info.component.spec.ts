@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MemberInfoComponent } from './member-info.component';
+import { provideMessageTesting } from '../../../shared/testing/message-testing.providers';
 
 describe('MemberInfoComponent', () => {
   let component: MemberInfoComponent;
@@ -8,7 +9,8 @@ describe('MemberInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MemberInfoComponent]
+      imports: [MemberInfoComponent],
+      providers: [provideMessageTesting()],
     })
     .compileComponents();
 
