@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OwnerComponent } from './owner.component';
+import { provideComponentTesting } from '../../../shared/testing/component-testing.providers';
 
 describe('OwnerComponent', () => {
   let component: OwnerComponent;
@@ -8,7 +9,8 @@ describe('OwnerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OwnerComponent]
+      imports: [OwnerComponent],
+      providers: provideComponentTesting(),
     })
     .compileComponents();
 

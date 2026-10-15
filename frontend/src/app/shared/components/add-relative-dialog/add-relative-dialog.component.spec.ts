@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddRelativeDialogComponent } from './add-relative-dialog.component';
+import { provideComponentTesting } from '../../testing/component-testing.providers';
 
 describe('AddRelativeDialogComponent', () => {
   let component: AddRelativeDialogComponent;
@@ -8,7 +9,8 @@ describe('AddRelativeDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddRelativeDialogComponent]
+      imports: [AddRelativeDialogComponent],
+      providers: provideComponentTesting(),
     })
     .compileComponents();
 

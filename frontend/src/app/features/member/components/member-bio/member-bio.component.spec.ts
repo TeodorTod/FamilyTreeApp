@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MemberBioComponent } from './member-bio.component';
+import { provideComponentTesting } from '../../../../shared/testing/component-testing.providers';
 
 describe('MemberBioComponent', () => {
   let component: MemberBioComponent;
@@ -8,7 +9,8 @@ describe('MemberBioComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MemberBioComponent]
+      imports: [MemberBioComponent],
+      providers: provideComponentTesting(),
     })
     .compileComponents();
 

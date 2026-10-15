@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MemberFavoritesComponent } from './member-favorites.component';
+import { provideComponentTesting } from '../../../../shared/testing/component-testing.providers';
 
 describe('MemberFavoritesComponent', () => {
   let component: MemberFavoritesComponent;
@@ -8,7 +9,8 @@ describe('MemberFavoritesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MemberFavoritesComponent]
+      imports: [MemberFavoritesComponent],
+      providers: provideComponentTesting(),
     })
     .compileComponents();
 

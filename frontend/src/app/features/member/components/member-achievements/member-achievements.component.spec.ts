@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MemberAchievementsComponent } from './member-achievements.component';
+import { provideComponentTesting } from '../../../../shared/testing/component-testing.providers';
 
 describe('MemberAchievementsComponent', () => {
   let component: MemberAchievementsComponent;
@@ -8,7 +9,8 @@ describe('MemberAchievementsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MemberAchievementsComponent]
+      imports: [MemberAchievementsComponent],
+      providers: provideComponentTesting(),
     })
     .compileComponents();
 

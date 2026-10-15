@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SubscriptionSettingsComponent } from './subscription-settings.component';
+import { provideComponentTesting } from '../../../shared/testing/component-testing.providers';
 
 describe('SubscriptionSettingsComponent', () => {
   let component: SubscriptionSettingsComponent;
@@ -8,7 +9,8 @@ describe('SubscriptionSettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SubscriptionSettingsComponent]
+      imports: [SubscriptionSettingsComponent],
+      providers: provideComponentTesting(),
     })
     .compileComponents();
 

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PhotoPickerDialogComponent } from './photo-picker-dialog.component';
+import { provideComponentTesting } from '../../../../shared/testing/component-testing.providers';
 
 describe('PhotoPickerDialogComponent', () => {
   let component: PhotoPickerDialogComponent;
@@ -8,7 +9,8 @@ describe('PhotoPickerDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PhotoPickerDialogComponent]
+      imports: [PhotoPickerDialogComponent],
+      providers: provideComponentTesting(),
     })
     .compileComponents();
 

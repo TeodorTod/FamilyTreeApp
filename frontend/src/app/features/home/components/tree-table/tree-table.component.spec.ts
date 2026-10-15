@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TreeTableComponent } from './tree-table.component';
+import { provideComponentTesting } from '../../../../shared/testing/component-testing.providers';
 
 describe('TreeTableComponent', () => {
   let component: TreeTableComponent;
@@ -8,7 +9,8 @@ describe('TreeTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TreeTableComponent]
+      imports: [TreeTableComponent],
+      providers: provideComponentTesting(),
     })
     .compileComponents();
 

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FatherComponent } from './father.component';
+import { provideComponentTesting } from '../../../shared/testing/component-testing.providers';
 
 describe('FatherComponent', () => {
   let component: FatherComponent;
@@ -8,7 +9,8 @@ describe('FatherComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FatherComponent]
+      imports: [FatherComponent],
+      providers: provideComponentTesting(),
     })
     .compileComponents();
 

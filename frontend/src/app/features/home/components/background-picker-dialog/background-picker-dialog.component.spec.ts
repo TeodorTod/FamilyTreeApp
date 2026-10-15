@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BackgroundPickerDialogComponent } from './background-picker-dialog.component';
+import { provideComponentTesting } from '../../../../shared/testing/component-testing.providers';
 
 describe('BackgroundPickerDialogComponent', () => {
   let component: BackgroundPickerDialogComponent;
@@ -8,7 +9,8 @@ describe('BackgroundPickerDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BackgroundPickerDialogComponent]
+      imports: [BackgroundPickerDialogComponent],
+      providers: provideComponentTesting(),
     })
     .compileComponents();
 
