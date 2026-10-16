@@ -1,6 +1,6 @@
-import { EnvironmentProviders } from '@angular/core';
-import { provideTranslateService } from '@ngx-translate/core';
+import { EnvironmentProviders, importProvidersFrom } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 export function provideTranslateTesting(): EnvironmentProviders {
-  return provideTranslateService();
+  return importProvidersFrom(TranslateModule.forRoot());
 }

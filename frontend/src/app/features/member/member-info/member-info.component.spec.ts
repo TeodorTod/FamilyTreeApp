@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 
 import { MemberInfoComponent } from './member-info.component';
-import { provideMessageTesting } from '../../../shared/testing/message-testing.providers';
+import { provideComponentTesting } from '../../../shared/testing/component-testing.providers';
 
 describe('MemberInfoComponent', () => {
   let component: MemberInfoComponent;
@@ -10,7 +11,18 @@ describe('MemberInfoComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MemberInfoComponent],
-      providers: [provideMessageTesting()],
+      providers: [
+        ...provideComponentTesting(),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: { get: () => 'owner' },
+              queryParamMap: { get: () => null },
+            },
+          },
+        },
+      ],
     })
     .compileComponents();
 

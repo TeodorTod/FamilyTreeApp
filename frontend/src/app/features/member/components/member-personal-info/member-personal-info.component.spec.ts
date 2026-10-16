@@ -16,6 +16,7 @@ describe('MemberPersonalInfoComponent', () => {
 
     fixture = TestBed.createComponent(MemberPersonalInfoComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('role', 'owner');
     fixture.detectChanges();
   });
 

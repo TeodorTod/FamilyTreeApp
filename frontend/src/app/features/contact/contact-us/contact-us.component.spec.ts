@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContactUsComponent } from './contact-us.component';
-import { provideMessageTesting } from '../../../shared/testing/message-testing.providers';
+import { provideComponentTesting } from '../../../shared/testing/component-testing.providers';
 
 describe('ContactUsComponent', () => {
   let component: ContactUsComponent;
@@ -10,7 +10,7 @@ describe('ContactUsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ContactUsComponent],
-      providers: [provideMessageTesting()],
+      providers: provideComponentTesting(),
     })
     .compileComponents();
 

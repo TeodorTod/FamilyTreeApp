@@ -16,6 +16,7 @@ describe('MemberCareerComponent', () => {
 
     fixture = TestBed.createComponent(MemberCareerComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('role', 'owner');
     fixture.detectChanges();
   });
 

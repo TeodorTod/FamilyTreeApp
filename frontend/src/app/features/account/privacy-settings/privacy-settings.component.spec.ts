@@ -9,6 +9,7 @@ import {
 } from '../../../core/services/cookie-consent.service';
 import { computed, signal } from '@angular/core';
 import { of } from 'rxjs';
+import { provideComponentTesting } from '../../../shared/testing/component-testing.providers';
 
 class CookieConsentServiceStub {
   private state = signal<CookieConsentState | null>({
@@ -58,6 +59,7 @@ describe('PrivacySettingsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [PrivacySettingsComponent],
       providers: [
+        ...provideComponentTesting(),
         { provide: SharingApiService, useValue: sharingApi },
         { provide: CookieConsentService, useValue: cookieService },
         provideTranslateTesting(),
