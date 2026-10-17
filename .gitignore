@@ -1,6 +1,7 @@
 # Angular
 /frontend/dist/
 /frontend/.angular/cache/
+/frontend/coverage/
 /frontend/node_modules/
 
 # NestJS
