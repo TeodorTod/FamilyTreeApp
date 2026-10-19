@@ -643,7 +643,6 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   handleBackgroundSelection(url: string) {
     const index = this.backgroundImages.indexOf(url);
     if (index !== -1) {
-      console.log('Selected background URL:', url, 'Index:', index);
       this.backgroundIndex.set(index);
     } else {
       console.warn(
