@@ -1,5 +1,5 @@
 // src/media/media.service.ts
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { writeFile, mkdir, stat, unlink } from 'fs/promises';
 import { join, basename, dirname, extname, normalize, sep } from 'path';
 import * as crypto from 'crypto';
@@ -34,6 +34,8 @@ const VIDEO_MIME = new Set([
 
 @Injectable()
 export class MediaService {
+  private readonly logger = new Logger(MediaService.name);
+
   constructor(private prisma: PrismaService) {}
 
   async uploadToLocalOrCloud(file: Express.Multer.File): Promise<string> {
@@ -140,7 +142,7 @@ export class MediaService {
         await this.tryGenerateVideoPoster(absPath);
       }
     } catch (e) {
-      console.warn('Formatting failed:', (e as Error).message);
+      this.logger.warn(`Media formatting failed: ${(e as Error).message}`);
     }
 
     // Save EXACT PATH in DB
