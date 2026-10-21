@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -30,6 +30,8 @@ const PASSWORD_ERROR_MESSAGES = {
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
@@ -135,7 +137,8 @@ export class AuthService {
     try {
       await this.mailer.sendPasswordResetEmail(user.email, resetUrl, locale);
     } catch (e) {
-      console.error('Password reset email failed:', (e as any)?.message || e);
+      const message = e instanceof Error ? e.message : String(e);
+      this.logger.error(`Password reset email failed: ${message}`);
     }
   }
 
