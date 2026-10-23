@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
@@ -59,6 +60,8 @@ const FREE_MEMBER_LIMIT = 10;
 
 @Injectable()
 export class FamilyMembersService {
+  private readonly logger = new Logger(FamilyMembersService.name);
+
   constructor(private prisma: PrismaService) {}
 
   buildMemberSelect(q?: GetMyTreeQuery): Prisma.FamilyMemberSelect {
@@ -321,7 +324,7 @@ export class FamilyMembersService {
 
       return { data, total };
     } catch (error) {
-      console.error('getPagedFamilyMembers error:', error);
+      this.logger.error('Failed to fetch paged family members', error);
       throw new BadRequestException('Failed to fetch paged family members');
     }
   }
