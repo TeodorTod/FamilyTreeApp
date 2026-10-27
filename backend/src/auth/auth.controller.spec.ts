@@ -5,6 +5,7 @@ import { AuthController } from './auth.controller';
 
 const authService = {
   resetPasswordWithToken: jest.fn(),
+  updateUserLanguage: jest.fn(),
 };
 
 describe('AuthController', () => {
@@ -12,6 +13,7 @@ describe('AuthController', () => {
 
   beforeEach(async () => {
     authService.resetPasswordWithToken.mockReset();
+    authService.updateUserLanguage.mockReset();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
@@ -54,6 +56,26 @@ describe('AuthController', () => {
         'reset-token',
         'new-password',
       );
+    });
+  });
+
+  describe('updateLanguage', () => {
+    it('rejects unsupported language codes without changing the user', async () => {
+      await expect(
+        controller.updateLanguage({ user: { id: 'user-id' } }, 'de' as 'bg'),
+      ).rejects.toThrow('Invalid language code');
+
+      expect(authService.updateUserLanguage).not.toHaveBeenCalled();
+    });
+
+    it('updates and returns a supported language', async () => {
+      authService.updateUserLanguage.mockResolvedValue({ language: 'bg' });
+
+      await expect(
+        controller.updateLanguage({ user: { id: 'user-id' } }, 'bg'),
+      ).resolves.toEqual({ language: 'bg' });
+
+      expect(authService.updateUserLanguage).toHaveBeenCalledWith('user-id', 'bg');
     });
   });
 });
