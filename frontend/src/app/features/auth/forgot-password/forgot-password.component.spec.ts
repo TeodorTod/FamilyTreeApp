@@ -43,4 +43,13 @@ describe('ForgotPasswordComponent', () => {
     expect(auth.requestPasswordReset).toHaveBeenCalledWith('person@example.com');
     expect(component.done()).toBeTrue();
   });
+
+  it('does not request a password reset when the email is invalid', () => {
+    component.form.controls.email.setValue('not-an-email');
+
+    component.submit();
+
+    expect(auth.requestPasswordReset).not.toHaveBeenCalled();
+    expect(component.done()).toBeFalse();
+  });
 });
