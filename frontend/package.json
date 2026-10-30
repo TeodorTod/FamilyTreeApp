@@ -27,7 +27,7 @@
     "@ngx-translate/http-loader": "^16.0.1",
     "@primeng/themes": "^21.0.4",
     "@stripe/stripe-js": "^8.5.3",
-    "cytoscape": "^3.32.1",
+    "cytoscape": "3.34.4",
     "cytoscape-dagre": "^2.5.0",
     "jspdf": "^3.0.1",
     "primeicons": "^7.0.0",
