@@ -82,6 +82,21 @@ describe('AuthController', () => {
   });
 
   describe('changePassword', () => {
+    it('rejects mismatched passwords without changing the password', async () => {
+      await expect(
+        controller.changePassword(
+          { user: { id: 'user-id', language: 'bg' } },
+          {
+            currentPassword: 'current-password',
+            newPassword: 'new-password',
+            confirmPassword: 'different-password',
+          },
+        ),
+      ).rejects.toThrow('Passwords do not match');
+
+      expect(authService.changePassword).not.toHaveBeenCalled();
+    });
+
     it('uses English when the user has no supported language', async () => {
       await expect(
         controller.changePassword(
