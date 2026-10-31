@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { provideTranslateTesting } from '../../../shared/testing/translate-testing.providers';
 
@@ -51,5 +51,16 @@ describe('ForgotPasswordComponent', () => {
 
     expect(auth.requestPasswordReset).not.toHaveBeenCalled();
     expect(component.done()).toBeFalse();
+  });
+
+  it('shows completion when the reset request fails to avoid disclosing accounts', () => {
+    auth.requestPasswordReset.and.returnValue(
+      throwError(() => new Error('Request failed')),
+    );
+    component.form.controls.email.setValue('person@example.com');
+
+    component.submit();
+
+    expect(component.done()).toBeTrue();
   });
 });
