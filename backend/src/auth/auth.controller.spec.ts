@@ -5,6 +5,7 @@ import { AuthController } from './auth.controller';
 
 const authService = {
   changePassword: jest.fn(),
+  issuePasswordReset: jest.fn(),
   resetPasswordWithToken: jest.fn(),
   updateUserLanguage: jest.fn(),
 };
@@ -14,6 +15,7 @@ describe('AuthController', () => {
 
   beforeEach(async () => {
     authService.changePassword.mockReset();
+    authService.issuePasswordReset.mockReset();
     authService.resetPasswordWithToken.mockReset();
     authService.updateUserLanguage.mockReset();
 
@@ -57,6 +59,18 @@ describe('AuthController', () => {
       expect(authService.resetPasswordWithToken).toHaveBeenCalledWith(
         'reset-token',
         'new-password',
+      );
+    });
+  });
+
+  describe('forgotPassword', () => {
+    it('always confirms the request after asking the service to issue a reset', async () => {
+      await expect(
+        controller.forgotPassword({ email: 'person@example.com' }),
+      ).resolves.toEqual({ ok: true });
+
+      expect(authService.issuePasswordReset).toHaveBeenCalledWith(
+        'person@example.com',
       );
     });
   });
