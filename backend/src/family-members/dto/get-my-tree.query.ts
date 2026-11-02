@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsIn, IsOptional, IsString } from 'class-validator';
+import { IsIn, IsOptional } from 'class-validator';
 
 export function toCsvArray(value: unknown): string[] {
   if (Array.isArray(value)) {

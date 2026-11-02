@@ -8,11 +8,9 @@ import {
   Res,
   UploadedFile,
   Param,
-  UseGuards,
   UseInterceptors,
   Body,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { MediaService } from './media.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
@@ -35,7 +33,6 @@ const ALLOWED = new Set([
 ]);
 
 @Controller('media')
-// @UseGuards(JwtAuthGuard)
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
