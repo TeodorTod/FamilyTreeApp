@@ -5,6 +5,7 @@ import { AuthController } from './auth.controller';
 
 const authService = {
   changePassword: jest.fn(),
+  deleteAccount: jest.fn(),
   issuePasswordReset: jest.fn(),
   resetPasswordWithToken: jest.fn(),
   updateUserLanguage: jest.fn(),
@@ -15,6 +16,7 @@ describe('AuthController', () => {
 
   beforeEach(async () => {
     authService.changePassword.mockReset();
+    authService.deleteAccount.mockReset();
     authService.issuePasswordReset.mockReset();
     authService.resetPasswordWithToken.mockReset();
     authService.updateUserLanguage.mockReset();
@@ -129,6 +131,16 @@ describe('AuthController', () => {
         'new-password',
         'en',
       );
+    });
+  });
+
+  describe('deleteAccount', () => {
+    it('deletes the authenticated user account', async () => {
+      await expect(
+        controller.deleteAccount({ user: { id: 'user-id' } }),
+      ).resolves.toEqual({ ok: true });
+
+      expect(authService.deleteAccount).toHaveBeenCalledWith('user-id');
     });
   });
 });
