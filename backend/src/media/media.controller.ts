@@ -115,7 +115,7 @@ export class MediaController {
                           ? 'image/svg+xml'
                           : 'application/octet-stream';
 
-    const range = (res.req.headers.range as string | undefined) ?? null;
+    const range = res.req.headers.range ?? null;
 
     if (type.startsWith('video/') && range) {
       // Partial content for video
