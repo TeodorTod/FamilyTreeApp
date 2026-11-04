@@ -50,7 +50,7 @@ export class MediaService {
 
     const ext = EXT_BY_MIME[file.mimetype] ?? 'bin';
     const orig = basename(file.originalname || 'file')
-      .replace(/[^\w.\-]+/g, '_')
+      .replace(/[^\w.-]+/g, '_')
       .slice(0, 80);
     const uniqueName = `${crypto.randomUUID()}-${orig}.${ext}`;
     const filePath = join(uploadsDir, uniqueName);
@@ -127,7 +127,7 @@ export class MediaService {
     await mkdir(folder, { recursive: true });
 
     const safeName = (file.originalname || 'file')
-      .replace(/[^\w.\-]+/g, '_')
+      .replace(/[^\w.-]+/g, '_')
       .slice(0, 100);
 
     const unique = `${crypto.randomUUID()}_${safeName}`;
@@ -206,7 +206,6 @@ export class MediaService {
   private async tryGenerateImagePreview(absPath: string) {
     // requires "sharp" (optional). If unavailable, silently skip.
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const sharp = require('sharp');
       const out = absPath.replace(/(\.\w+)$/, '_preview.jpg');
       await sharp(absPath)
@@ -220,7 +219,6 @@ export class MediaService {
   private async tryGenerateVideoPoster(absPath: string) {
     // requires fluent-ffmpeg + ffmpeg installed (optional)
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const ffmpeg = require('fluent-ffmpeg');
       const out = absPath.replace(/(\.\w+)$/, '_poster.jpg');
       await new Promise<void>((resolve, reject) => {
