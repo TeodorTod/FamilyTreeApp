@@ -1,7 +1,7 @@
 // src/media/media.service.ts
 import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { writeFile, mkdir, stat, unlink } from 'fs/promises';
-import { join, basename, dirname, extname, normalize, sep } from 'path';
+import { join, basename, dirname, normalize, sep } from 'path';
 import * as crypto from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { createReadStream } from 'fs';
@@ -131,7 +131,6 @@ export class MediaService {
       .slice(0, 100);
 
     const unique = `${crypto.randomUUID()}_${safeName}`;
-    const ext = extname(unique) || '';
     const absPath = normalize(join(folder, unique));
     await writeFile(absPath, file.buffer);
 
