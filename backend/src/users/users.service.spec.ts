@@ -19,4 +19,24 @@ describe('UsersService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  it('creates a public user without exposing the password', () => {
+    expect(
+      service.toPublicUser({
+        id: 'user-id',
+        email: 'person@example.com',
+        password: 'hashed-password',
+        isAdmin: null,
+      }),
+    ).toEqual({
+      id: 'user-id',
+      email: 'person@example.com',
+      hasPassword: true,
+      isAdmin: false,
+    });
+  });
+
+  it('returns null for a missing user', () => {
+    expect(service.toPublicUser(null)).toBeNull();
+  });
 });
