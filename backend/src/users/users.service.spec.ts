@@ -39,4 +39,18 @@ describe('UsersService', () => {
   it('returns null for a missing user', () => {
     expect(service.toPublicUser(null)).toBeNull();
   });
+
+  it('preserves administrator status without a password', () => {
+    expect(
+      service.toPublicUser({
+        id: 'admin-id',
+        password: null,
+        isAdmin: true,
+      }),
+    ).toEqual({
+      id: 'admin-id',
+      hasPassword: false,
+      isAdmin: true,
+    });
+  });
 });
