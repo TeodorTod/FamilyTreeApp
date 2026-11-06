@@ -100,9 +100,10 @@ export class MailerService {
 
     try {
       await this.api.sendTransacEmail(payload);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
       this.logger.error(
-        `Brevo sendTransacEmail failed: ${err?.message || err}`,
+        `Brevo sendTransacEmail failed: ${message}`,
       );
       throw err;
     }
