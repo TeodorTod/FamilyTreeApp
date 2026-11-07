@@ -46,4 +46,22 @@ describe('AuthService', () => {
     expect(usersService.validatePassword).not.toHaveBeenCalled();
     expect(usersService.toPublicUser).not.toHaveBeenCalled();
   });
+
+  it('returns the sanitized user after valid credentials', async () => {
+    const user = { id: 'user-id', email: 'person@example.com' };
+    const safeUser = { ...user, hasPassword: true, isAdmin: false };
+    usersService.findByEmail.mockResolvedValue(user);
+    usersService.validatePassword.mockResolvedValue(true);
+    usersService.toPublicUser.mockReturnValue(safeUser);
+
+    await expect(
+      service.validateUser(user.email, 'correct-password'),
+    ).resolves.toEqual(safeUser);
+
+    expect(usersService.validatePassword).toHaveBeenCalledWith(
+      user,
+      'correct-password',
+    );
+    expect(usersService.toPublicUser).toHaveBeenCalledWith(user);
+  });
 });
