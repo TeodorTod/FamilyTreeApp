@@ -5,14 +5,24 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 
+const usersService = {
+  findByEmail: jest.fn(),
+  validatePassword: jest.fn(),
+  toPublicUser: jest.fn(),
+};
+
 describe('AuthService', () => {
   let service: AuthService;
 
   beforeEach(async () => {
+    usersService.findByEmail.mockReset();
+    usersService.validatePassword.mockReset();
+    usersService.toPublicUser.mockReset();
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
-        { provide: UsersService, useValue: {} },
+        { provide: UsersService, useValue: usersService },
         { provide: JwtService, useValue: {} },
         { provide: PrismaService, useValue: { passwordResetToken: {} } },
         { provide: MailerService, useValue: {} },
@@ -24,5 +34,16 @@ describe('AuthService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('does not validate a password when the account does not exist', async () => {
+    usersService.findByEmail.mockResolvedValue(null);
+
+    await expect(
+      service.validateUser('missing@example.com', 'password'),
+    ).resolves.toBeNull();
+
+    expect(usersService.validatePassword).not.toHaveBeenCalled();
+    expect(usersService.toPublicUser).not.toHaveBeenCalled();
   });
 });
