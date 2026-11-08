@@ -7,23 +7,27 @@ import { AuthService } from './auth.service';
 
 const usersService = {
   findByEmail: jest.fn(),
+  findById: jest.fn(),
   validatePassword: jest.fn(),
   toPublicUser: jest.fn(),
 };
+const jwtService = { sign: jest.fn() };
 
 describe('AuthService', () => {
   let service: AuthService;
 
   beforeEach(async () => {
     usersService.findByEmail.mockReset();
+    usersService.findById.mockReset();
     usersService.validatePassword.mockReset();
     usersService.toPublicUser.mockReset();
+    jwtService.sign.mockReset();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
         { provide: UsersService, useValue: usersService },
-        { provide: JwtService, useValue: {} },
+        { provide: JwtService, useValue: jwtService },
         { provide: PrismaService, useValue: { passwordResetToken: {} } },
         { provide: MailerService, useValue: {} },
       ],
@@ -75,5 +79,24 @@ describe('AuthService', () => {
     ).resolves.toBeNull();
 
     expect(usersService.toPublicUser).not.toHaveBeenCalled();
+  });
+
+  it('uses the authenticated user when a fresh lookup no longer finds it', async () => {
+    const user = { id: 'user-id', email: 'person@example.com' };
+    const safeUser = { ...user, hasPassword: true, isAdmin: false };
+    usersService.findById.mockResolvedValue(null);
+    usersService.toPublicUser.mockReturnValue(safeUser);
+    jwtService.sign.mockReturnValue('access-token');
+
+    await expect(service.login(user)).resolves.toEqual({
+      access_token: 'access-token',
+      user: safeUser,
+    });
+
+    expect(jwtService.sign).toHaveBeenCalledWith({
+      email: user.email,
+      sub: user.id,
+    });
+    expect(usersService.toPublicUser).toHaveBeenCalledWith(user);
   });
 });
