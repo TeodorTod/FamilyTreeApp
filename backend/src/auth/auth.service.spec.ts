@@ -64,4 +64,16 @@ describe('AuthService', () => {
     );
     expect(usersService.toPublicUser).toHaveBeenCalledWith(user);
   });
+
+  it('does not expose a user after an invalid password', async () => {
+    const user = { id: 'user-id', email: 'person@example.com' };
+    usersService.findByEmail.mockResolvedValue(user);
+    usersService.validatePassword.mockResolvedValue(false);
+
+    await expect(
+      service.validateUser(user.email, 'wrong-password'),
+    ).resolves.toBeNull();
+
+    expect(usersService.toPublicUser).not.toHaveBeenCalled();
+  });
 });
