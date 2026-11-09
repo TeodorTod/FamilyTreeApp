@@ -99,4 +99,18 @@ describe('AuthService', () => {
     });
     expect(usersService.toPublicUser).toHaveBeenCalledWith(user);
   });
+
+  it('rejects password changes for accounts without password login', async () => {
+    usersService.findById.mockResolvedValue({
+      id: 'user-id',
+      password: null,
+      language: 'bg',
+    });
+
+    await expect(
+      service.changePassword('user-id', 'current-password', 'new-password'),
+    ).rejects.toThrow('Вход с парола не е активиран за този акаунт.');
+
+    expect(usersService.validatePassword).not.toHaveBeenCalled();
+  });
 });
