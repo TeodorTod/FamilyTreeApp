@@ -53,4 +53,10 @@ describe('UsersService', () => {
       isAdmin: true,
     });
   });
+
+  it('rejects password validation when password login is unavailable', async () => {
+    await expect(
+      service.validatePassword({ password: null }, 'password'),
+    ).resolves.toBe(false);
+  });
 });
