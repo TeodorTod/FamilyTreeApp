@@ -1,7 +1,7 @@
 import { ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { AdminGuard } from './admin.guard';
 
-type AdminUser = { isAdmin?: boolean };
+type AdminUser = { isAdmin?: unknown };
 
 function contextFor(user?: AdminUser): ExecutionContext {
   return {
@@ -19,6 +19,9 @@ describe('AdminGuard', () => {
   it('rejects a missing or non-administrator user', () => {
     expect(() => guard.canActivate(contextFor())).toThrow(ForbiddenException);
     expect(() => guard.canActivate(contextFor({ isAdmin: false }))).toThrow(
+      ForbiddenException,
+    );
+    expect(() => guard.canActivate(contextFor({ isAdmin: 'true' }))).toThrow(
       ForbiddenException,
     );
   });
