@@ -15,4 +15,11 @@ describe('RecaptchaService', () => {
       BadRequestException,
     );
   });
+
+  it('bypasses verification when no secret is configured', async () => {
+    const config = { get: jest.fn(() => undefined) };
+    const service = new RecaptchaService(config as unknown as ConfigService);
+
+    await expect(service.verify(undefined, 'login')).resolves.toBeUndefined();
+  });
 });
