@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { FamilyMembersService } from './family-members.service';
 
@@ -34,6 +34,34 @@ describe('FamilyMembersService', () => {
         type: 'parent',
       }),
     ).rejects.toThrow(BadRequestException);
+
+    expect(prisma.relationship.create).not.toHaveBeenCalled();
+  });
+
+  it('does not create a relationship with a member outside the user tree', async () => {
+    const prisma = {
+      familyMember: {
+        findFirst: jest
+          .fn()
+          .mockResolvedValueOnce(null)
+          .mockResolvedValueOnce({ id: 'child-id', role: 'child' }),
+      },
+      relationship: {
+        findMany: jest.fn(),
+        create: jest.fn(),
+      },
+    };
+    const service = new FamilyMembersService(
+      prisma as unknown as PrismaService,
+    );
+
+    await expect(
+      service.createRelationship('user-id', {
+        fromMemberId: 'foreign-member-id',
+        toMemberId: 'child-id',
+        type: 'parent',
+      }),
+    ).rejects.toThrow(NotFoundException);
 
     expect(prisma.relationship.create).not.toHaveBeenCalled();
   });
