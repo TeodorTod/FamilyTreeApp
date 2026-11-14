@@ -38,6 +38,46 @@ describe('FamilyMembersService', () => {
     expect(prisma.relationship.create).not.toHaveBeenCalled();
   });
 
+  it('creates a parent relationship when that parent role is available', async () => {
+    const relationship = { id: 'relationship-id' };
+    const prisma = {
+      familyMember: {
+        findFirst: jest
+          .fn()
+          .mockResolvedValueOnce({ id: 'father-id', role: 'father' })
+          .mockResolvedValueOnce({
+            id: 'child-id',
+            role: 'child',
+            firstName: 'Alex',
+            lastName: 'Doe',
+          }),
+      },
+      relationship: {
+        findMany: jest.fn().mockResolvedValue([]),
+        create: jest.fn().mockResolvedValue(relationship),
+      },
+    };
+    const service = new FamilyMembersService(
+      prisma as unknown as PrismaService,
+    );
+
+    await expect(
+      service.createRelationship('user-id', {
+        fromMemberId: 'father-id',
+        toMemberId: 'child-id',
+        type: 'parent',
+      }),
+    ).resolves.toEqual(relationship);
+
+    expect(prisma.relationship.create).toHaveBeenCalledWith({
+      data: {
+        fromMemberId: 'father-id',
+        toMemberId: 'child-id',
+        type: 'parent',
+      },
+    });
+  });
+
   it('does not create a relationship with a member outside the user tree', async () => {
     const prisma = {
       familyMember: {
