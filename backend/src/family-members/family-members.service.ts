@@ -246,22 +246,24 @@ export class FamilyMembersService {
   }
 
   async createRelationship(userId: string, dto: CreateRelationshipDto) {
+    const [fromMember, toMember] = await Promise.all([
+      this.prisma.familyMember.findFirst({
+        where: { id: dto.fromMemberId, userId },
+        select: { id: true, role: true, firstName: true, lastName: true },
+      }),
+      this.prisma.familyMember.findFirst({
+        where: { id: dto.toMemberId, userId },
+        select: { id: true, role: true, firstName: true, lastName: true },
+      }),
+    ]);
+
+    if (!fromMember || !toMember) {
+      throw new NotFoundException('Relationship members not found for this user');
+    }
+
     if (dto.type === 'parent') {
-      const [parent, child] = await Promise.all([
-        this.prisma.familyMember.findFirst({
-          where: { id: dto.fromMemberId, userId },
-          select: { id: true, role: true, firstName: true, lastName: true },
-        }),
-        this.prisma.familyMember.findFirst({
-          where: { id: dto.toMemberId, userId },
-          select: { id: true, role: true, firstName: true, lastName: true },
-        }),
-      ]);
-
-      if (!parent || !child) {
-        throw new NotFoundException('Parent or child not found for this user');
-      }
-
+      const parent = fromMember;
+      const child = toMember;
       const { relationType } = this.parseRole(parent.role);
       if (relationType === 'mother' || relationType === 'father') {
         const existingParents = await this.prisma.relationship.findMany({
