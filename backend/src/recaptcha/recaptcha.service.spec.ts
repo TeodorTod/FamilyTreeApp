@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RecaptchaService } from './recaptcha.service';
 
@@ -21,5 +21,24 @@ describe('RecaptchaService', () => {
     const service = new RecaptchaService(config as unknown as ConfigService);
 
     await expect(service.verify(undefined, 'login')).resolves.toBeUndefined();
+  });
+
+  it('rejects a token issued for a different action', async () => {
+    const config = {
+      get: jest.fn((key: string) =>
+        key === 'RECAPTCHA_SECRET_KEY' ? 'secret' : 0.5,
+      ),
+    };
+    const service = new RecaptchaService(config as unknown as ConfigService);
+    const fetchMock = jest.spyOn(global, 'fetch').mockResolvedValue({
+      ok: true,
+      json: async () => ({ success: true, action: 'register' }),
+    } as Response);
+
+    await expect(service.verify('token', 'login')).rejects.toThrow(
+      UnauthorizedException,
+    );
+
+    fetchMock.mockRestore();
   });
 });
