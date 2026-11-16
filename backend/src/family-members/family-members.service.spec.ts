@@ -169,6 +169,40 @@ describe('FamilyMembersService', () => {
     expect(prisma.relationship.create).not.toHaveBeenCalled();
   });
 
+  it('creates a non-parent relationship when both members belong to the user', async () => {
+    const relationship = { id: 'relationship-id' };
+    const prisma = {
+      familyMember: {
+        findFirst: jest
+          .fn()
+          .mockResolvedValueOnce({ id: 'member-id', role: 'owner' })
+          .mockResolvedValueOnce({ id: 'partner-id', role: 'partner' }),
+      },
+      relationship: {
+        create: jest.fn().mockResolvedValue(relationship),
+      },
+    };
+    const service = new FamilyMembersService(
+      prisma as unknown as PrismaService,
+    );
+
+    await expect(
+      service.createRelationship('user-id', {
+        fromMemberId: 'member-id',
+        toMemberId: 'partner-id',
+        type: 'partner',
+      }),
+    ).resolves.toEqual(relationship);
+
+    expect(prisma.relationship.create).toHaveBeenCalledWith({
+      data: {
+        fromMemberId: 'member-id',
+        toMemberId: 'partner-id',
+        type: 'partner',
+      },
+    });
+  });
+
   it('does not change the role of a member outside the user tree', async () => {
     const prisma = {
       familyMember: {
