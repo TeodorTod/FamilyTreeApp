@@ -22,4 +22,16 @@ describe('BillingService', () => {
       }),
     ).rejects.toThrow(ServiceUnavailableException);
   });
+
+  it('rejects webhook processing when Stripe is not configured', async () => {
+    const config = { get: jest.fn(() => undefined) };
+    const service = new BillingService(
+      config as unknown as ConfigService,
+      {} as UsersService,
+    );
+
+    await expect(
+      service.handleWebhook(Buffer.from('{}'), 'signature'),
+    ).rejects.toThrow(ServiceUnavailableException);
+  });
 });
