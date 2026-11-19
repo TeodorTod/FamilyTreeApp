@@ -49,6 +49,30 @@ BREVO_REPLYTO_NAME=
 
 Admin access is now database-backed via the `User.isAdmin` boolean column.
 
+## Database migrations
+
+Run these commands from `backend/` after creating `.env` and setting
+`DATABASE_URL` to the target PostgreSQL database.
+
+```bash
+# Apply existing migrations for local development and regenerate the Prisma client.
+npx prisma migrate dev
+npx prisma generate
+
+# Inspect whether the database matches the migration history.
+npx prisma migrate status
+```
+
+For a production or shared environment, apply only committed migrations:
+
+```bash
+npx prisma migrate deploy
+```
+
+Do not use `prisma migrate dev` against production. Create new migrations locally
+with `npx prisma migrate dev --name <descriptive-name>`, review the generated
+files under `prisma/migrations/`, then commit them before deploying.
+
 ## Run
 
 ```bash
