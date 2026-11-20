@@ -114,6 +114,28 @@ npm run build
 npm run test
 ```
 
+## CI status and checks
+
+There is currently no checked-in CI workflow under `.github/workflows/`.
+Until one is added, run the following checks locally before merging or deploying:
+
+```bash
+# Backend
+cd backend
+npm run build
+npm test -- --runInBand
+
+# Frontend
+cd ../frontend
+npm run build
+npm run test:coverage
+```
+
+For browser end-to-end coverage, install the Playwright browser dependencies and
+run `npm run e2e` from `frontend/`. A green future CI run should mean these
+build and test commands complete for the affected application; it does not
+replace required environment or deployment checks.
+
 ## Media storage
 
 Uploaded files are stored on disk at the path configured by `MEDIA_ROOT`. Ensure the API process has read/write access to that directory.
