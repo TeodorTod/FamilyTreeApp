@@ -34,4 +34,20 @@ describe('BillingService', () => {
       service.handleWebhook(Buffer.from('{}'), 'signature'),
     ).rejects.toThrow(ServiceUnavailableException);
   });
+
+  it('fails startup when an enabled Stripe plan price is missing', () => {
+    const config = {
+      get: jest.fn((key: string) =>
+        key === 'STRIPE_SECRET_KEY' ? 'sk_test_placeholder' : undefined,
+      ),
+    };
+
+    expect(
+      () =>
+        new BillingService(
+          config as unknown as ConfigService,
+          {} as UsersService,
+        ),
+    ).toThrow('Stripe price is not configured for plan SIX_MONTHS');
+  });
 });
