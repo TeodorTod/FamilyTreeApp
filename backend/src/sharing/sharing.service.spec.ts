@@ -79,4 +79,33 @@ describe('SharingService', () => {
 
     expect(prisma.shareRequest.create).not.toHaveBeenCalled();
   });
+
+  it('does not create a duplicate active share request', async () => {
+    const prisma = {
+      familyMember: {
+        findUnique: jest.fn().mockResolvedValue({
+          id: 'member-id',
+          userId: 'owner-id',
+          isAlive: false,
+        }),
+      },
+      shareRequest: {
+        findFirst: jest.fn().mockResolvedValue({ id: 'request-id' }),
+        create: jest.fn(),
+      },
+      memberShareConsent: { findUnique: jest.fn() },
+      userSettings: {
+        findUnique: jest.fn().mockResolvedValue({
+          allowDeceasedDiscoveryDefault: true,
+        }),
+      },
+    };
+    const service = new SharingService(prisma as unknown as PrismaService);
+
+    await expect(
+      service.createShareRequest('requester-id', { targetMemberId: 'member-id' }),
+    ).rejects.toThrow(BadRequestException);
+
+    expect(prisma.shareRequest.create).not.toHaveBeenCalled();
+  });
 });
