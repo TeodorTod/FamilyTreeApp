@@ -92,3 +92,18 @@ npm run test:e2e
 npm run test:cov
 ```
 
+## CI verification
+
+No backend CI workflow is currently committed. Use the following commands for
+the backend CI-equivalent check from `backend/`:
+
+```bash
+npm ci
+npm run build
+npm test -- --runInBand
+```
+
+Both `build` and `test` run `prisma generate` first, so CI must provide a valid
+`DATABASE_URL` for Prisma configuration. Keep migrations committed and run
+`npx prisma migrate deploy` separately in the deployment environment.
+
