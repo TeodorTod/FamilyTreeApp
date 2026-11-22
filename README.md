@@ -95,6 +95,22 @@ Admin:
 - `stripePublishableKey`
 - `recaptchaSiteKey`
 
+## Local development troubleshooting
+
+- **Backend fails during Prisma generation or startup:** confirm
+  `backend/.env` contains a reachable `DATABASE_URL`, then run
+  `cd backend`, `npx prisma migrate dev`, and `npm run prisma:generate`.
+- **Frontend cannot reach the API or browser requests fail CORS:** keep
+  `FRONTEND_URL=http://localhost:4200` in `backend/.env`, verify the frontend
+  `apiUrl` targets the backend (normally `http://localhost:3000`), then restart
+  both dev servers after changing environment values.
+- **Port already in use:** set a free `PORT` in `backend/.env` and update the
+  frontend API URL to match it.
+- **Uploads fail or media cannot be served:** ensure `MEDIA_ROOT` exists and
+  that the backend process has read/write permission for it.
+- **Generated Prisma types appear stale:** run `npm run prisma:generate` from
+  `backend/` after changing `prisma/schema.prisma` or switching branches.
+
 ## Scripts
 
 ### Backend
