@@ -108,4 +108,44 @@ describe('SharingService', () => {
 
     expect(prisma.shareRequest.create).not.toHaveBeenCalled();
   });
+
+  it('creates a pending request for a discoverable deceased member', async () => {
+    const request = { id: 'request-id' };
+    const prisma = {
+      familyMember: {
+        findUnique: jest.fn().mockResolvedValue({
+          id: 'member-id',
+          userId: 'owner-id',
+          isAlive: false,
+        }),
+      },
+      shareRequest: {
+        findFirst: jest.fn().mockResolvedValue(null),
+        create: jest.fn().mockResolvedValue(request),
+      },
+      memberShareConsent: { findUnique: jest.fn() },
+      userSettings: {
+        findUnique: jest.fn().mockResolvedValue({
+          allowDeceasedDiscoveryDefault: true,
+        }),
+      },
+    };
+    const service = new SharingService(prisma as unknown as PrismaService);
+
+    await expect(
+      service.createShareRequest('requester-id', {
+        targetMemberId: 'member-id',
+        message: 'Please share this profile.',
+      }),
+    ).resolves.toEqual(request);
+
+    expect(prisma.shareRequest.create).toHaveBeenCalledWith({
+      data: {
+        requesterUserId: 'requester-id',
+        targetMemberId: 'member-id',
+        message: 'Please share this profile.',
+        status: 'PENDING',
+      },
+    });
+  });
 });
