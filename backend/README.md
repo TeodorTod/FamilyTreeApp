@@ -107,3 +107,16 @@ Both `build` and `test` run `prisma generate` first, so CI must provide a valid
 `DATABASE_URL` for Prisma configuration. Keep migrations committed and run
 `npx prisma migrate deploy` separately in the deployment environment.
 
+## Local development troubleshooting
+
+- **Prisma generation or startup fails:** verify `DATABASE_URL` in `.env`, then
+  run `npx prisma migrate dev` followed by `npm run prisma:generate`.
+- **Database schema is out of date:** run `npx prisma migrate status` to check
+  migration history; create new local migrations with
+  `npx prisma migrate dev --name <descriptive-name>`.
+- **Browser calls fail after starting the API:** confirm `FRONTEND_URL` matches
+  the frontend development URL, restart the API, and verify the frontend uses
+  the same backend port configured by `PORT`.
+- **Uploads fail locally:** create the `MEDIA_ROOT` directory and grant the API
+  process read/write access to it.
+
