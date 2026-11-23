@@ -70,7 +70,7 @@ export class SharingService {
   }
 
   async upsertMyMembersConsent(userId: string, items: UpsertMemberConsentDto[]) {
-    const ops: Prisma.PrismaPromise<any>[] = [];
+    const ops: Prisma.PrismaPromise<unknown>[] = [];
     for (const i of items) {
       ops.push(
         this.prisma.memberShareConsent.upsert({
