@@ -54,3 +54,18 @@ npm run build
 npm run test
 ```
 
+## Local development troubleshooting
+
+- **The UI cannot reach the API:** verify `apiUrl` in
+  `src/environments/environment.ts` matches the running backend URL (normally
+  `http://localhost:3000`). Start the backend separately and restart `npm start`
+  after changing environment values.
+- **Browser requests fail CORS:** set the backend `FRONTEND_URL` to
+  `http://localhost:4200`, then restart the backend.
+- **Port 4200 is already in use:** run `npm start -- --port <free-port>` and
+  update backend `FRONTEND_URL` if the browser will call the API from that port.
+- **End-to-end tests cannot launch a browser:** install Playwright browsers with
+  `npx playwright install`, then run `npm run e2e`.
+- **Headless tests are needed for a local CI-equivalent check:** run
+  `npm run test:coverage`.
+
