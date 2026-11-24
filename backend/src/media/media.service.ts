@@ -246,7 +246,7 @@ export class MediaService {
     // Remove files (main + best-effort derived)
     await Promise.allSettled(
       rows.flatMap(({ url, type }) => {
-        const tasks: Promise<any>[] = [];
+        const tasks: Promise<void>[] = [];
         try {
           this.ensureUnderRoot(url);
         } catch {
