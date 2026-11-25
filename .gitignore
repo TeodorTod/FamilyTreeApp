@@ -11,9 +11,11 @@
 # Uploaded media (do not commit user photos)
 /backend/public/uploads/
 
-# Environment
+# Local environment files (keep example templates versioned)
 **/.env
 .env*
+!.env.example
+**/.enf
 
 # Logs
 **/*.log
