@@ -3,6 +3,24 @@ import { PrismaService } from '../prisma/prisma.service';
 import { SharingService } from './sharing.service';
 
 describe('SharingService', () => {
+  it('rejects a share decision by someone other than the member owner', async () => {
+    const prisma = {
+      shareRequest: {
+        findUnique: jest.fn().mockResolvedValue({
+          status: 'PENDING',
+          target: { userId: 'owner-id' },
+        }),
+        update: jest.fn(),
+      },
+    };
+    const service = new SharingService(prisma as unknown as PrismaService);
+
+    await expect(
+      service.decide('other-user-id', 'request-id', 'APPROVED'),
+    ).rejects.toThrow(ForbiddenException);
+    expect(prisma.shareRequest.update).not.toHaveBeenCalled();
+  });
+
   it('does not allow a user to request sharing of their own member', async () => {
     const prisma = {
       familyMember: {
