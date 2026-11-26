@@ -3,6 +3,24 @@ import { PrismaService } from '../prisma/prisma.service';
 import { SharingService } from './sharing.service';
 
 describe('SharingService', () => {
+  it('rejects a decision on an already decided request', async () => {
+    const prisma = {
+      shareRequest: {
+        findUnique: jest.fn().mockResolvedValue({
+          status: 'REJECTED',
+          target: { userId: 'owner-id' },
+        }),
+        update: jest.fn(),
+      },
+    };
+    const service = new SharingService(prisma as unknown as PrismaService);
+
+    await expect(
+      service.decide('owner-id', 'request-id', 'APPROVED'),
+    ).rejects.toThrow(BadRequestException);
+    expect(prisma.shareRequest.update).not.toHaveBeenCalled();
+  });
+
   it('rejects a share decision by someone other than the member owner', async () => {
     const prisma = {
       shareRequest: {
