@@ -1,8 +1,23 @@
-import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SharingService } from './sharing.service';
 
 describe('SharingService', () => {
+  it('rejects a decision for a missing request', async () => {
+    const prisma = {
+      shareRequest: {
+        findUnique: jest.fn().mockResolvedValue(null),
+        update: jest.fn(),
+      },
+    };
+    const service = new SharingService(prisma as unknown as PrismaService);
+
+    await expect(
+      service.decide('owner-id', 'missing-request-id', 'APPROVED'),
+    ).rejects.toThrow(NotFoundException);
+    expect(prisma.shareRequest.update).not.toHaveBeenCalled();
+  });
+
   it('rejects a decision on an already decided request', async () => {
     const prisma = {
       shareRequest: {
