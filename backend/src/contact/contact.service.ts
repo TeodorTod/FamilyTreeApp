@@ -21,8 +21,8 @@ export class ContactService {
   }
 
   async submit(dto: ContactMessageDto): Promise<void> {
-    const message = { ...dto };
-    delete message.recaptchaToken;
+    const { recaptchaToken, ...message } = dto;
+    void recaptchaToken;
     await this.mailer.send({
       to: { email: this.recipient },
       subject: this.buildSubject(message.lang),
